@@ -7,7 +7,10 @@ public class DirtGenerator : MonoBehaviour {
 	public float itemsPerSqUnit;
 	public float stdDevPerSqUnit;
 	public float sizeMultiplier;
-	
+	public Screen screen;
+	public AudioClip dumpSound;
+	public float volume = 0.5f;
+
 	private BoxCollider m_c;
 
 	// Use this for initialization
@@ -26,6 +29,7 @@ public class DirtGenerator : MonoBehaviour {
 		Stealibot bot = collider.gameObject.GetComponent<Stealibot>();
 
 		if (bot && Random.value < bot.chanceToLitter){
+			screen.audioSource.PlayOneShot(dumpSound, volume);
 			GenerateDirt();
 		}
 

@@ -4,6 +4,7 @@ using System.Collections;
 public class ChargingStation : MonoBehaviour {
 
 	public GameObject sparks;
+	public AudioClip chargeSound;
 
 	// Use this for initialization
 	void Start () {
@@ -26,6 +27,10 @@ public class ChargingStation : MonoBehaviour {
 			sc.screen.batteryPercentage++;
 			if (sc.screen.batteryPercentage > 100){
 				sc.screen.batteryPercentage = 100;
+			}
+
+			if (!sc.screen.audioSource.isPlaying){
+				sc.screen.audioSource.PlayOneShot(chargeSound);
 			}
 		}
 	}

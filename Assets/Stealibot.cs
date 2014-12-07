@@ -22,7 +22,16 @@ public class Stealibot : MonoBehaviour {
 	public GameObject sparks;
 	public Transform deadPosition;
 
-	public Transform path;
+	public AudioClip upSound;
+	public AudioClip downSound;
+	public AudioClip destroySound;
+	public AudioClip walkSound;
+	public AudioClip dumpSound;
+	public float volume = 0.5f;
+	public float walkVolume = 1;
+
+//	public Transform path;
+
 
 	private Animator m_anim;
 	private bool m_walking = false;
@@ -73,6 +82,8 @@ public class Stealibot : MonoBehaviour {
 		screen.EnteredRoom(currentRoom.roomCollider);
 
 		sparks.SetActive(true);
+
+		screen.audioSource.PlayOneShot(destroySound);
 
 		yield return new WaitForSeconds(2);
 
@@ -141,6 +152,8 @@ public class Stealibot : MonoBehaviour {
 		
 		m_walking = true;
 
+
+
 		List<Vector3> points = new List<Vector3>();
 		foreach (Transform p in path){
 			points.Add(p.position);
@@ -149,6 +162,9 @@ public class Stealibot : MonoBehaviour {
 		transform.position = points[0];
 
 		foreach (Vector3 nextPoint in points){
+			if (!screen.audioSource.isPlaying){
+				screen.audioSource.PlayOneShot(walkSound, walkVolume);
+			}
 			while (Vector3.Distance(nextPoint, transform.position) > distanceFromTarget) {
 				transform.LookAt(nextPoint);
 				transform.position = Vector3.MoveTowards(transform.position, nextPoint, Time.deltaTime * walkSpeed);
@@ -158,4 +174,13 @@ public class Stealibot : MonoBehaviour {
 
 		m_walking = false;
 	}
+
+	public void PlayUpSound(){
+		screen.audioSource.PlayOneShot(upSound, volume);
+	}
+
+	public void PlayDownSound(){
+		screen.audioSource.PlayOneShot(downSound, volume);
+	}
+	
 }

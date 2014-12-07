@@ -11,9 +11,15 @@ public class SecuribotControls : MonoBehaviour {
 	public Screen screen;
 	public Stealibot stealibot;
 
+	public AudioClip[]  trashPickup;
+	public AudioClip	failedPickup;
+	public float 		pickupTime = 0.5f;
+
 	// Camera feeds
 
 	private CharacterController m_cc;
+	private int m_pickupSndIndex = 0;
+	private float m_lastPickupTime = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -31,6 +37,10 @@ public class SecuribotControls : MonoBehaviour {
 
 		m_cc.Move(transform.forward * Input.GetAxis("Vertical") * speed * Time.deltaTime);   
 		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+
+		if (Time.time - m_lastPickupTime > pickupTime){
+			m_pickupSndIndex = 0;
+		}
 	}
 
 	void OnTriggerEnter(Collider collider){
@@ -48,6 +58,12 @@ public class SecuribotControls : MonoBehaviour {
 		if (screen.batteryPercentage > 0){
 			Destroy(trash);
 			screen.batteryPercentage -= 1;
+			screen.audioSource.PlayOneShot(trashPickup[m_pickupSndIndex]);
+			m_pickupSndIndex = (m_pickupSndIndex + 1) % trashPickup.Length;
+			m_lastPickupTime = Time.time;
+		}
+		else {
+			screen.audioSource.PlayOneShot(failedPickup);
 		}
 	}
 }

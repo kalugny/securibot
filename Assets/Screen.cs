@@ -40,10 +40,13 @@ public class Screen : MonoBehaviour {
 	public Image emailImg;
 	public Sprite[] letters;
 	public float winPercentage = 0.25f;
+	public AudioSource audioSource;
+	public AudioClip blip;
 
 	private int m_maxTrash;
 	private System.TimeSpan m_timeSpan;
 	private bool m_started = false;
+	private bool m_pulsateBat = false;
 
 
 	// Use this for initialization
@@ -56,11 +59,27 @@ public class Screen : MonoBehaviour {
 		m_timeSpan = new System.TimeSpan(0, 0, totalTimeSecs);
 
 		okButton.onClick.AddListener(() => {
+
+//			audioSource.PlayOneShot(blip);
+
 			m_started = true;
 			Time.timeScale = 1;
 			startPanel.gameObject.SetActive(false);
 
+			StartCoroutine(pulsateBattery());
 		});
+	}
+
+	IEnumerator pulsateBattery(){
+		while (true){
+			if (m_pulsateBat){
+				batteryImg.transform.localScale = (1.25f + 0.25f * Mathf.Sin (2 * Time.time)) * Vector3.one;
+			}
+			else { 
+				batteryImg.transform.localScale = Vector3.one;
+			}
+			yield return new WaitForEndOfFrame();
+		}
 	}
 	
 	// Update is called once per frame
@@ -120,7 +139,8 @@ public class Screen : MonoBehaviour {
 		batteryBar.GetComponent<RectTransform>().sizeDelta = new Vector2(batteryPixels, 17);
 		batteryBar.color = getColor(batteryPercentage, 100, false);
 
-		batteryImg.color = (batteryPixels <= 0) ? Color.red : Color.white;
+		m_pulsateBat = (batteryPercentage <= 0);
+		batteryImg.color = (batteryPercentage <= 0) ? Color.red : Color.white;
 
 	}
 
@@ -202,7 +222,6 @@ public class Screen : MonoBehaviour {
 		yield return new WaitForSeconds(1f);
 
 
-
 		t += "YOU HAVE BEEN HACKED!\n\n";
 		message.text = t;
 		
@@ -211,16 +230,26 @@ public class Screen : MonoBehaviour {
 		t += "LONG LIVE MYROBOT!\n";
 		message.text = t;
 		
-		yield return new WaitForSeconds(5);
+		yield return new WaitForSeconds(3);
 
-		t = "SYSTEM ERROR DETECTED\nREBOOTING...";
+		t = "SYSTEM ERROR DETECTED\n\nFIXING: ";
 		message.text = t;
+
+		for (int i = 0; i <= 88; i += Random.Range (4, 20)){
+			message.text = t + i + "%";
+			yield return new WaitForSeconds(0.3f);
+		}
+		message.text = t + "88%\n\nFIX COMPLETE\n5/6 SCREENS BACK ON-LINE\nINTRUDER NEUTRALIZED";
+
+		yield return new WaitForSeconds(3);
+
+		message.text = "TIME REMAINING: " + string.Format("{0:00}:{1:00}",  m_timeSpan.Minutes, m_timeSpan.Seconds) + "\n\nGO ROOMBOY!";
 
 		yield return new WaitForSeconds(3);
 
 		messagePanel.gameObject.SetActive(false);
 
-		bigDisplay.text.text = "CALL TECHNICIAN";
+		bigDisplay.text.text = "OUT OF ORDER";
 
 		while (true){
 
@@ -245,7 +274,7 @@ public class Screen : MonoBehaviour {
 			else {
 				bigDisplay.img.texture = null;
 				bigDisplay.img.color = Color.black;
-				bigDisplay.text.text = "CALL TECHNICIAN";
+				bigDisplay.text.text = "OUT OF ORDER";
 			}
 
 
