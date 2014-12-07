@@ -11,7 +11,7 @@ public class DirtGenerator : MonoBehaviour {
 	private BoxCollider m_c;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		m_c = GetComponent<BoxCollider>();
 
 		GenerateDirt();

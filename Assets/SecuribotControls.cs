@@ -38,6 +38,10 @@ public class SecuribotControls : MonoBehaviour {
 	}
 
 	public void CollectTrash(GameObject trash){
-		Destroy(trash);
+
+		if (screen.batteryPercentage > 0){
+			Destroy(trash);
+			screen.batteryPercentage -= 1;
+		}
 	}
 }
