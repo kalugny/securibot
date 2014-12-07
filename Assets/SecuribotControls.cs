@@ -22,7 +22,11 @@ public class SecuribotControls : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float forward = Mathf.Sign(Input.GetAxis("Vertical"));
+
+		float forward = Mathf.Sign(Vector3.Dot(m_cc.velocity, transform.forward));
+		if (forward == 0){
+			forward = 1;
+		}
 		transform.Rotate(0, forward * Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime, 0);
 
 		m_cc.Move(transform.forward * Input.GetAxis("Vertical") * speed * Time.deltaTime);   

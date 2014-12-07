@@ -134,11 +134,7 @@ public class Stealibot : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyUp(KeyCode.Space)){
-			StartCoroutine(WalkPath(path));
-		}
-
-
+	
 	}
 
 	public IEnumerator WalkPath(Transform path){

@@ -43,6 +43,7 @@ public class Screen : MonoBehaviour {
 
 	private int m_maxTrash;
 	private System.TimeSpan m_timeSpan;
+	private bool m_started = false;
 
 
 	// Use this for initialization
@@ -55,6 +56,7 @@ public class Screen : MonoBehaviour {
 		m_timeSpan = new System.TimeSpan(0, 0, totalTimeSecs);
 
 		okButton.onClick.AddListener(() => {
+			m_started = true;
 			Time.timeScale = 1;
 			startPanel.gameObject.SetActive(false);
 
@@ -63,6 +65,16 @@ public class Screen : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+
+		if (!m_started){
+
+			if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.Escape)){
+				okButton.onClick.Invoke();
+			}
+
+			return;
+		}
 
 		m_timeSpan -= new System.TimeSpan(Mathf.RoundToInt(Time.deltaTime * 10000 * 1000));
 		timeLeft.text = string.Format("{0:00}:{1:00}",  m_timeSpan.Minutes, m_timeSpan.Seconds);
