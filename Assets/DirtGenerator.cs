@@ -22,6 +22,15 @@ public class DirtGenerator : MonoBehaviour {
 	
 	}
 
+	void OnTriggerEnter(Collider collider){
+		Stealibot bot = collider.gameObject.GetComponent<Stealibot>();
+
+		if (bot && Random.value < bot.chanceToLitter){
+			GenerateDirt();
+		}
+
+	}
+
 	public void GenerateDirt(){
 		float area = Mathf.Abs(m_c.bounds.size.x * m_c.bounds.size.z);
 		float meanNumberOfItems = area * itemsPerSqUnit;

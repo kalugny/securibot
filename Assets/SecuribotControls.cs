@@ -9,6 +9,7 @@ public class SecuribotControls : MonoBehaviour {
 
 	// Screen
 	public Screen screen;
+	public Stealibot stealibot;
 
 	// Camera feeds
 
@@ -30,6 +31,7 @@ public class SecuribotControls : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider){
 		screen.EnteredRoom(collider);
+		stealibot.EnteredRoom(collider);
 
 		if (collider.tag == "Trash"){
 			CollectTrash(collider.gameObject);
