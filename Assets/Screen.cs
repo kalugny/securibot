@@ -41,12 +41,14 @@ public class Screen : MonoBehaviour {
 	public Sprite[] letters;
 	public float winPercentage = 0.25f;
 	public AudioSource audioSource;
-	public AudioClip blip;
+	public AudioClip beep;
+	public AudioClip beep2;
 
 	private int m_maxTrash;
 	private System.TimeSpan m_timeSpan;
 	private bool m_started = false;
 	private bool m_pulsateBat = false;
+	private int m_lastSecs = 5;
 
 
 	// Use this for initialization
@@ -104,8 +106,20 @@ public class Screen : MonoBehaviour {
 		int trashAmount = GameObject.FindGameObjectsWithTag("Trash").Length;
 		float trashPercentage = Mathf.Min ((float)trashAmount / m_maxTrash, 1);
 
+
+		if (m_timeSpan.TotalSeconds <= m_lastSecs && m_timeSpan.TotalSeconds > 0){
+			Debug.Log(m_timeSpan.TotalSeconds + ", " + m_lastSecs);
+			m_lastSecs--;
+			audioSource.PlayOneShot(beep);
+		}
+
 		if (m_timeSpan.TotalSeconds <= 0){
 			Time.timeScale = 0;
+
+			if (m_lastSecs >= 0){
+				audioSource.PlayOneShot(beep2);
+				m_lastSecs--;
+			}
 
 			Sprite msg;
 			if (hacked && trashPercentage > winPercentage){
