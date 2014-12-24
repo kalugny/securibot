@@ -26,7 +26,6 @@ public class Stealibot : MonoBehaviour {
 	public AudioClip downSound;
 	public AudioClip destroySound;
 	public AudioClip walkSound;
-	public AudioClip dumpSound;
 	public float volume = 0.5f;
 	public float walkVolume = 1;
 
