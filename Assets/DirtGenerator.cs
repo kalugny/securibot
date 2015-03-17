@@ -56,9 +56,9 @@ public class DirtGenerator : MonoBehaviour {
 			g.transform.position = pos;
 			g.transform.rotation = Random.rotation;
 			g.transform.localScale = sizeMultiplier * Vector3.one;
-			g.collider.isTrigger = true;
+			g.GetComponent<Collider>().isTrigger = true;
 			g.tag = "Trash";
-			g.renderer.material = m;
+			g.GetComponent<Renderer>().material = m;
 		}
 	}
 }
